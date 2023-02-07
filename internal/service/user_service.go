@@ -47,6 +47,7 @@ func (s *userService) CreateUser(input *dto.RegisterRequestBody) (*models.User, 
 	if err != nil {
 		return user, err
 	}
+
 	if user.UserId != 0 {
 		return user, &custom_error.UserAlreadyExistsError{}
 	}

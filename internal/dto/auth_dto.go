@@ -31,11 +31,10 @@ type ForgotPasswordResponseBody struct {
 }
 
 type LoginResponseBody struct {
-	ID           uint   `json:"id"`
-	Name         string `json:"name"`
-	Email        string `json:"email"`
-	WalletNumber string `json:"wallet"`
-	Token        string `json:"token"`
+	ID    uint   `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Token string `json:"token"`
 }
 
 func FormatLogin(user *models.User, token string) LoginResponseBody {
