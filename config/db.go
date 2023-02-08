@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/fauziagustian/delos-aqua/internal/models"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -38,8 +39,8 @@ func ConnectDb() *gorm.DB {
 	log.Println("connected")
 	db.Logger = logger.Default.LogMode(logger.Info)
 
-	// log.Println("running migrations")
-	// db.AutoMigrate(&models.User{}, &models.Farm{}, &models.Pond{})
+	log.Println("running migrations")
+	db.AutoMigrate(&models.User{}, &models.Farm{}, &models.Pond{}, &models.UserAgents{})
 
 	return db
 }

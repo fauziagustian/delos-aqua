@@ -7,7 +7,7 @@ import (
 )
 
 type FarmRepository interface {
-	FindAll(query *dto.FarmRequestQuery) ([]*models.Farm, error)
+	FindAll(query *dto.RequestQuery) ([]*models.Farm, error)
 	Count() (int64, error)
 	Save(farm *models.Farm) (*models.Farm, error)
 	FindByName(name string) (*models.Farm, error)
@@ -26,7 +26,7 @@ func NewFarmRepository(c *gorm.DB) FarmRepository {
 	}
 }
 
-func (r *farmRepository) FindAll(query *dto.FarmRequestQuery) ([]*models.Farm, error) {
+func (r *farmRepository) FindAll(query *dto.RequestQuery) ([]*models.Farm, error) {
 	var farm []*models.Farm
 
 	offset := (query.Page - 1) * query.Limit

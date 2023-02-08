@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/fauziagustian/delos-aqua/internal/models"
-	"gorm.io/gorm"
 )
 
 type FarmRequestBody struct {
@@ -17,7 +16,7 @@ type FarmResponseBody struct {
 	Name   string `json:"name"`
 }
 
-type FarmRequestQuery struct {
+type RequestQuery struct {
 	Search string `form:"s"`
 	SortBy string `form:"sortBy"`
 	Sort   string `form:"sort"`
@@ -32,15 +31,7 @@ type FarmResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type FarmResponseDelete struct {
-	FarmId    uint           `json:"id"`
-	Name      string         `json:"farm"`
-	CreatedAt time.Time      `json:"created_at"`
-	UpdatedAt time.Time      `json:"updated_at"`
-	DeletedAt gorm.DeletedAt `json:"deleted_at"`
-}
-
-func FormatQuery(query *FarmRequestQuery) *FarmRequestQuery {
+func FormatQuery(query *RequestQuery) *RequestQuery {
 	if query.Limit == 0 {
 		query.Limit = 10
 	}
@@ -71,16 +62,6 @@ func FormatFarm(farm *models.Farm) FarmResponse {
 		Name:      farm.Name,
 		CreatedAt: farm.CreatedAt,
 		UpdatedAt: farm.UpdatedAt,
-	}
-}
-
-func FormatDeleteFarm(farm *models.Farm) FarmResponseDelete {
-	return FarmResponseDelete{
-		FarmId:    uint(farm.FarmId),
-		Name:      farm.Name,
-		CreatedAt: farm.CreatedAt,
-		UpdatedAt: farm.UpdatedAt,
-		DeletedAt: farm.DeletedAt,
 	}
 }
 

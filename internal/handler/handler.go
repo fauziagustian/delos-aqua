@@ -13,6 +13,7 @@ type Handler struct {
 	authService s.AuthService
 	jwtService  s.JWTService
 	farmService s.FarmService
+	pondService s.PondService
 }
 
 type HandlerConfig struct {
@@ -20,6 +21,7 @@ type HandlerConfig struct {
 	AuthService s.AuthService
 	JWTService  s.JWTService
 	FarmService s.FarmService
+	PondService s.PondService
 }
 
 func NewHandler(c *HandlerConfig) *Handler {
@@ -28,6 +30,7 @@ func NewHandler(c *HandlerConfig) *Handler {
 		authService: c.AuthService,
 		jwtService:  c.JWTService,
 		farmService: c.FarmService,
+		pondService: c.PondService,
 	}
 }
 

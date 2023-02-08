@@ -13,24 +13,27 @@ import (
 )
 
 func main() {
-
 	db := config.ConnectDb()
+
 	userRepository := repository.NewUserRepository(db)
 	farmRepository := repository.NewFarmRepository(db)
+	pondRepository := repository.NewPondRepository(db)
 
 	userService := service.NewUserService(&service.USConfig{UserRepository: userRepository})
 	authService := service.NewAuthService(&service.ASConfig{UserRepository: userRepository})
 	jwtService := service.NewJWTService(&service.JWTSConfig{})
 	farmService := service.NewFarmService(&service.FConfig{FarmRepository: farmRepository})
+	pondService := service.NewPondService(&service.PConfig{PondRepository: pondRepository})
 
 	h := handler.NewHandler(&handler.HandlerConfig{
 		UserService: userService,
 		AuthService: authService,
 		JWTService:  jwtService,
 		FarmService: farmService,
+		PondService: pondService,
 	})
 
-	routes := route.NewRouter(&route.RouterConfig{UserService: userService, JWTService: jwtService, FarmService: farmService})
+	routes := route.NewRouter(&route.RouterConfig{UserService: userService, JWTService: jwtService, FarmService: farmService, PondService: pondService})
 
 	router := gin.Default()
 	router.Static("/docs", "./pkg/swaggerui")
@@ -42,6 +45,7 @@ func main() {
 	routes.Auth(api, h)
 	routes.User(api, h)
 	routes.Farm(api, h)
+	routes.Pond(api, h)
 
 	router.Run(":8080")
 }

@@ -10,7 +10,7 @@ import (
 )
 
 type FarmService interface {
-	GetFarm(query *dto.FarmRequestQuery) ([]*models.Farm, error)
+	GetFarm(query *dto.RequestQuery) ([]*models.Farm, error)
 	CountFarm() (int64, error)
 	CreateFarm(query *dto.FarmRequestBody) (*models.Farm, error)
 	UpdateFarm(query *dto.FarmRequestBody, id int) (*models.Farm, error)
@@ -31,7 +31,7 @@ func NewFarmService(c *FConfig) FarmService {
 	}
 }
 
-func (s *farmService) GetFarm(query *dto.FarmRequestQuery) ([]*models.Farm, error) {
+func (s *farmService) GetFarm(query *dto.RequestQuery) ([]*models.Farm, error) {
 	farm, err := s.farmRepository.FindAll(query)
 	if err != nil {
 		return farm, err

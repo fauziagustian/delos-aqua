@@ -11,12 +11,12 @@ import (
 
 func (h *Handler) GetFarm(c *gin.Context) {
 
-	query := &dto.FarmRequestQuery{}
+	query := &dto.RequestQuery{}
 	err := c.ShouldBindQuery(query)
 	if err != nil {
 		if err != nil {
 			errors := utils.FormatValidationError(err)
-			response := utils.ErrorResponse("get transaction failed", http.StatusUnprocessableEntity, errors)
+			response := utils.ErrorResponse("get farm failed", http.StatusUnprocessableEntity, errors)
 			c.JSON(http.StatusUnprocessableEntity, response)
 			return
 		}
