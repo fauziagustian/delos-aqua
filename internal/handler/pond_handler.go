@@ -48,8 +48,8 @@ func (h *Handler) GetPond(c *gin.Context) {
 }
 
 func (h *Handler) CreatePond(c *gin.Context) {
-	// getUserId, _ := c.Get("userid")
-	// userId := getUserId.(int)
+	getUserId, _ := c.Get("userid")
+	userId := getUserId.(int)
 
 	input := &dto.PondRequestBody{}
 	err := c.ShouldBindJSON(input)
@@ -60,7 +60,7 @@ func (h *Handler) CreatePond(c *gin.Context) {
 		return
 	}
 
-	pond, err := h.pondService.CreatePond(input)
+	pond, err := h.pondService.CreatePond(input, userId)
 	if err != nil {
 		statusCode := utils.GetStatusCode(err)
 		response := utils.ErrorResponse("Create Pond failed", statusCode, err.Error())
@@ -74,8 +74,8 @@ func (h *Handler) CreatePond(c *gin.Context) {
 }
 
 func (h *Handler) UpdatePond(c *gin.Context) {
-	// getUserId, _ := c.Get("userid")
-	// userId := getUserId.(int)
+	getUserId, _ := c.Get("userid")
+	userId := getUserId.(int)
 
 	input := &dto.PondRequestBody{}
 	getId := c.Param("id")
@@ -93,7 +93,7 @@ func (h *Handler) UpdatePond(c *gin.Context) {
 		return
 	}
 
-	pond, err := h.pondService.UpdatePond(input, id)
+	pond, err := h.pondService.UpdatePond(input, id, userId)
 	if err != nil {
 		statusCode := utils.GetStatusCode(err)
 		response := utils.ErrorResponse("Updated Pond failed", statusCode, err.Error())
@@ -107,8 +107,8 @@ func (h *Handler) UpdatePond(c *gin.Context) {
 }
 
 func (h *Handler) DeletePond(c *gin.Context) {
-	// getUserId, _ := c.Get("userid")
-	// userId := getUserId.(int)
+	getUserId, _ := c.Get("userid")
+	userId := getUserId.(int)
 
 	getId := c.Param("id")
 	id, err := strconv.Atoi(getId)
@@ -116,7 +116,7 @@ func (h *Handler) DeletePond(c *gin.Context) {
 		return
 	}
 
-	_, err = h.pondService.DeletePond(id)
+	_, err = h.pondService.DeletePond(id, userId)
 	if err != nil {
 		statusCode := utils.GetStatusCode(err)
 		response := utils.ErrorResponse("Deleted Pond failed", statusCode, err.Error())

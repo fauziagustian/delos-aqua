@@ -10,9 +10,9 @@ import (
 type PondService interface {
 	GetPond(query *dto.RequestQuery, userId int) ([]*models.Pond, error)
 	CountPond() (int64, error)
-	CreatePond(query *dto.PondRequestBody) (*models.Pond, error)
-	UpdatePond(query *dto.PondRequestBody, id int) (*models.Pond, error)
-	DeletePond(id int) (*models.Pond, error)
+	CreatePond(query *dto.PondRequestBody, userid int) (*models.Pond, error)
+	UpdatePond(query *dto.PondRequestBody, id, userid int) (*models.Pond, error)
+	DeletePond(id, userid int) (*models.Pond, error)
 }
 
 type pondService struct {
@@ -47,7 +47,7 @@ func (s *pondService) CountPond() (int64, error) {
 	return totalPonds, nil
 }
 
-func (s *pondService) CreatePond(input *dto.PondRequestBody) (*models.Pond, error) {
+func (s *pondService) CreatePond(input *dto.PondRequestBody, userid int) (*models.Pond, error) {
 	pond := &models.Pond{}
 
 	myPond, err := s.pondRepository.FindByName(input.Name)
@@ -61,7 +61,7 @@ func (s *pondService) CreatePond(input *dto.PondRequestBody) (*models.Pond, erro
 
 	pond.Name = input.Name
 	pond.FarmID = input.FarmId
-	pond, err = s.pondRepository.Save(pond)
+	pond, err = s.pondRepository.Save(pond, userid)
 	if err != nil {
 		return pond, err
 	}
@@ -69,7 +69,7 @@ func (s *pondService) CreatePond(input *dto.PondRequestBody) (*models.Pond, erro
 	return pond, nil
 }
 
-func (s *pondService) UpdatePond(query *dto.PondRequestBody, id int) (*models.Pond, error) {
+func (s *pondService) UpdatePond(query *dto.PondRequestBody, id, userid int) (*models.Pond, error) {
 	pond := &models.Pond{}
 
 	myPondId, err := s.pondRepository.FindById(id)
@@ -93,7 +93,7 @@ func (s *pondService) UpdatePond(query *dto.PondRequestBody, id int) (*models.Po
 	pond.Name = query.Name
 	pond.PondId = id
 	pond.FarmID = query.FarmId
-	pond, err = s.pondRepository.Update(pond)
+	pond, err = s.pondRepository.Update(pond, userid)
 	if err != nil {
 		return pond, err
 	}
@@ -101,7 +101,7 @@ func (s *pondService) UpdatePond(query *dto.PondRequestBody, id int) (*models.Po
 	return pond, nil
 }
 
-func (s *pondService) DeletePond(id int) (*models.Pond, error) {
+func (s *pondService) DeletePond(id, userid int) (*models.Pond, error) {
 	pond := &models.Pond{}
 
 	myPond, err := s.pondRepository.FindById(id)
@@ -113,7 +113,7 @@ func (s *pondService) DeletePond(id int) (*models.Pond, error) {
 		return myPond, &custom_error.PondNotFoundError{}
 	}
 
-	pond, err = s.pondRepository.Delete(id)
+	pond, err = s.pondRepository.Delete(id, userid)
 	if err != nil {
 		return pond, err
 	}
