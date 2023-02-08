@@ -37,6 +37,11 @@ func (r *farmRepository) FindAll(query *dto.RequestQuery) ([]*models.Farm, error
 		return farm, err
 	}
 
+	userAgent := &models.UserAgents{}
+	userAgent.MethodUrl = "GET /farm"
+
+	SaveUserAgent(r.db, userAgent)
+
 	return farm, nil
 }
 

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -11,6 +10,8 @@ import (
 )
 
 func (h *Handler) GetPond(c *gin.Context) {
+	getUserId, _ := c.Get("userid")
+	userId := getUserId.(int)
 
 	query := &dto.RequestQuery{}
 	err := c.ShouldBindQuery(query)
@@ -25,7 +26,7 @@ func (h *Handler) GetPond(c *gin.Context) {
 
 	query = dto.FormatQuery(query)
 
-	pond, err := h.pondService.GetPond(query)
+	pond, err := h.pondService.GetPond(query, userId)
 	if err != nil {
 		statusCode := utils.GetStatusCode(err)
 		response := utils.ErrorResponse("get pond failed", statusCode, err.Error())
@@ -47,6 +48,8 @@ func (h *Handler) GetPond(c *gin.Context) {
 }
 
 func (h *Handler) CreatePond(c *gin.Context) {
+	// getUserId, _ := c.Get("userid")
+	// userId := getUserId.(int)
 
 	input := &dto.PondRequestBody{}
 	err := c.ShouldBindJSON(input)
@@ -56,8 +59,6 @@ func (h *Handler) CreatePond(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
-
-	log.Println(" Cek input bind ", input)
 
 	pond, err := h.pondService.CreatePond(input)
 	if err != nil {
@@ -73,6 +74,9 @@ func (h *Handler) CreatePond(c *gin.Context) {
 }
 
 func (h *Handler) UpdatePond(c *gin.Context) {
+	// getUserId, _ := c.Get("userid")
+	// userId := getUserId.(int)
+
 	input := &dto.PondRequestBody{}
 	getId := c.Param("id")
 
@@ -103,6 +107,9 @@ func (h *Handler) UpdatePond(c *gin.Context) {
 }
 
 func (h *Handler) DeletePond(c *gin.Context) {
+	// getUserId, _ := c.Get("userid")
+	// userId := getUserId.(int)
+
 	getId := c.Param("id")
 	id, err := strconv.Atoi(getId)
 	if err != nil {

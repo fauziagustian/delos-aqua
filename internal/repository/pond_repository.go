@@ -7,7 +7,7 @@ import (
 )
 
 type PondRepository interface {
-	FindAll(query *dto.RequestQuery) ([]*models.Pond, error)
+	FindAll(query *dto.RequestQuery, userId int) ([]*models.Pond, error)
 	Count() (int64, error)
 	Save(pond *models.Pond) (*models.Pond, error)
 	FindByName(name string) (*models.Pond, error)
@@ -26,7 +26,7 @@ func NewPondRepository(c *gorm.DB) PondRepository {
 	}
 }
 
-func (r *pondRepository) FindAll(query *dto.RequestQuery) ([]*models.Pond, error) {
+func (r *pondRepository) FindAll(query *dto.RequestQuery, userId int) ([]*models.Pond, error) {
 	var pond []*models.Pond
 
 	offset := (query.Page - 1) * query.Limit
@@ -36,6 +36,12 @@ func (r *pondRepository) FindAll(query *dto.RequestQuery) ([]*models.Pond, error
 	if err != nil {
 		return pond, err
 	}
+
+	userAgent := &models.UserAgents{}
+	userAgent.MethodUrl = "GET /farm"
+	userAgent.UserId = userId
+
+	SaveUserAgent(r.db, userAgent)
 
 	return pond, nil
 }

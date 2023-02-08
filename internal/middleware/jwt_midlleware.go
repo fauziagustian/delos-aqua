@@ -54,6 +54,7 @@ func AuthMiddleware(jwtService s.JWTService, userService s.UserService) gin.Hand
 			return
 		}
 
+		c.Set("userid", user.UserId)
 		c.Set("user", user)
 		c.Next()
 	}

@@ -8,7 +8,7 @@ import (
 )
 
 type PondService interface {
-	GetPond(query *dto.RequestQuery) ([]*models.Pond, error)
+	GetPond(query *dto.RequestQuery, userId int) ([]*models.Pond, error)
 	CountPond() (int64, error)
 	CreatePond(query *dto.PondRequestBody) (*models.Pond, error)
 	UpdatePond(query *dto.PondRequestBody, id int) (*models.Pond, error)
@@ -29,8 +29,8 @@ func NewPondService(c *PConfig) PondService {
 	}
 }
 
-func (s *pondService) GetPond(query *dto.RequestQuery) ([]*models.Pond, error) {
-	pond, err := s.pondRepository.FindAll(query)
+func (s *pondService) GetPond(query *dto.RequestQuery, userId int) ([]*models.Pond, error) {
+	pond, err := s.pondRepository.FindAll(query, userId)
 	if err != nil {
 		return pond, err
 	}

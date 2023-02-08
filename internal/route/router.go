@@ -8,25 +8,28 @@ import (
 )
 
 type Router struct {
-	userService s.UserService
-	jwtService  s.JWTService
-	farmService s.FarmService
-	pondService s.PondService
+	userService      s.UserService
+	jwtService       s.JWTService
+	farmService      s.FarmService
+	pondService      s.PondService
+	userAgentService s.UserAgentService
 }
 
 type RouterConfig struct {
-	UserService s.UserService
-	JWTService  s.JWTService
-	FarmService s.FarmService
-	PondService s.PondService
+	UserService      s.UserService
+	JWTService       s.JWTService
+	FarmService      s.FarmService
+	PondService      s.PondService
+	UserAgentService s.UserAgentService
 }
 
 func NewRouter(c *RouterConfig) *Router {
 	return &Router{
-		userService: c.UserService,
-		jwtService:  c.JWTService,
-		farmService: c.FarmService,
-		pondService: c.PondService,
+		userService:      c.UserService,
+		jwtService:       c.JWTService,
+		farmService:      c.FarmService,
+		pondService:      c.PondService,
+		userAgentService: c.UserAgentService,
 	}
 }
 
@@ -51,4 +54,8 @@ func (r *Router) Pond(route *gin.RouterGroup, h *handler.Handler) {
 	route.POST("/pond", middleware.AuthMiddleware(r.jwtService, r.userService), h.CreatePond)
 	route.PUT("/pond/:id", middleware.AuthMiddleware(r.jwtService, r.userService), h.UpdatePond)
 	route.DELETE("/pond/:id", middleware.AuthMiddleware(r.jwtService, r.userService), h.DeletePond)
+}
+
+func (r *Router) UserAgent(route *gin.RouterGroup, h *handler.Handler) {
+	route.GET("/user-agent", middleware.AuthMiddleware(r.jwtService, r.userService), h.GetUserAgent)
 }

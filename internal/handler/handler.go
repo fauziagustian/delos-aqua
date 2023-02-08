@@ -9,28 +9,31 @@ import (
 )
 
 type Handler struct {
-	userService s.UserService
-	authService s.AuthService
-	jwtService  s.JWTService
-	farmService s.FarmService
-	pondService s.PondService
+	userService      s.UserService
+	authService      s.AuthService
+	jwtService       s.JWTService
+	farmService      s.FarmService
+	pondService      s.PondService
+	userAgentService s.UserAgentService
 }
 
 type HandlerConfig struct {
-	UserService s.UserService
-	AuthService s.AuthService
-	JWTService  s.JWTService
-	FarmService s.FarmService
-	PondService s.PondService
+	UserService      s.UserService
+	AuthService      s.AuthService
+	JWTService       s.JWTService
+	FarmService      s.FarmService
+	PondService      s.PondService
+	UserAgentService s.UserAgentService
 }
 
 func NewHandler(c *HandlerConfig) *Handler {
 	return &Handler{
-		userService: c.UserService,
-		authService: c.AuthService,
-		jwtService:  c.JWTService,
-		farmService: c.FarmService,
-		pondService: c.PondService,
+		userService:      c.UserService,
+		authService:      c.AuthService,
+		jwtService:       c.JWTService,
+		farmService:      c.FarmService,
+		pondService:      c.PondService,
+		userAgentService: c.UserAgentService,
 	}
 }
 
