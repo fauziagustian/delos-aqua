@@ -10,6 +10,8 @@ import (
 )
 
 func (h *Handler) GetFarm(c *gin.Context) {
+	getUserId, _ := c.Get("userid")
+	userId := getUserId.(int)
 
 	query := &dto.RequestQuery{}
 	err := c.ShouldBindQuery(query)
@@ -24,7 +26,7 @@ func (h *Handler) GetFarm(c *gin.Context) {
 
 	query = dto.FormatQuery(query)
 
-	farm, err := h.farmService.GetFarm(query)
+	farm, err := h.farmService.GetFarm(query, userId)
 	if err != nil {
 		statusCode := utils.GetStatusCode(err)
 		response := utils.ErrorResponse("get farm failed", statusCode, err.Error())
@@ -46,6 +48,8 @@ func (h *Handler) GetFarm(c *gin.Context) {
 }
 
 func (h *Handler) CreateFarm(c *gin.Context) {
+	getUserId, _ := c.Get("userid")
+	userId := getUserId.(int)
 
 	input := &dto.FarmRequestBody{}
 	err := c.ShouldBindJSON(input)
@@ -56,7 +60,7 @@ func (h *Handler) CreateFarm(c *gin.Context) {
 		return
 	}
 
-	farm, err := h.farmService.CreateFarm(input)
+	farm, err := h.farmService.CreateFarm(input, userId)
 	if err != nil {
 		statusCode := utils.GetStatusCode(err)
 		response := utils.ErrorResponse("Create Farm failed", statusCode, err.Error())
@@ -70,6 +74,9 @@ func (h *Handler) CreateFarm(c *gin.Context) {
 }
 
 func (h *Handler) UpdateFarm(c *gin.Context) {
+	getUserId, _ := c.Get("userid")
+	userId := getUserId.(int)
+
 	input := &dto.FarmRequestBody{}
 	getId := c.Param("id")
 
@@ -86,7 +93,7 @@ func (h *Handler) UpdateFarm(c *gin.Context) {
 		return
 	}
 
-	farm, err := h.farmService.UpdateFarm(input, id)
+	farm, err := h.farmService.UpdateFarm(input, id, userId)
 	if err != nil {
 		statusCode := utils.GetStatusCode(err)
 		response := utils.ErrorResponse("Updated Farm failed", statusCode, err.Error())
@@ -100,13 +107,16 @@ func (h *Handler) UpdateFarm(c *gin.Context) {
 }
 
 func (h *Handler) DeleteFarm(c *gin.Context) {
+	getUserId, _ := c.Get("userid")
+	userId := getUserId.(int)
+
 	getId := c.Param("id")
 	id, err := strconv.Atoi(getId)
 	if err != nil {
 		return
 	}
 
-	_, err = h.farmService.DeleteFarm(id)
+	_, err = h.farmService.DeleteFarm(id, userId)
 	if err != nil {
 		statusCode := utils.GetStatusCode(err)
 		response := utils.ErrorResponse("Deleted Farm failed", statusCode, err.Error())

@@ -10,11 +10,11 @@ import (
 )
 
 type FarmService interface {
-	GetFarm(query *dto.RequestQuery) ([]*models.Farm, error)
+	GetFarm(query *dto.RequestQuery, userid int) ([]*models.Farm, error)
 	CountFarm() (int64, error)
-	CreateFarm(query *dto.FarmRequestBody) (*models.Farm, error)
-	UpdateFarm(query *dto.FarmRequestBody, id int) (*models.Farm, error)
-	DeleteFarm(id int) (*models.Farm, error)
+	CreateFarm(query *dto.FarmRequestBody, userid int) (*models.Farm, error)
+	UpdateFarm(query *dto.FarmRequestBody, id, userid int) (*models.Farm, error)
+	DeleteFarm(id, userid int) (*models.Farm, error)
 }
 
 type farmService struct {
@@ -31,8 +31,8 @@ func NewFarmService(c *FConfig) FarmService {
 	}
 }
 
-func (s *farmService) GetFarm(query *dto.RequestQuery) ([]*models.Farm, error) {
-	farm, err := s.farmRepository.FindAll(query)
+func (s *farmService) GetFarm(query *dto.RequestQuery, userid int) ([]*models.Farm, error) {
+	farm, err := s.farmRepository.FindAll(query, userid)
 	if err != nil {
 		return farm, err
 	}
@@ -49,7 +49,7 @@ func (s *farmService) CountFarm() (int64, error) {
 	return totalFarms, nil
 }
 
-func (s *farmService) CreateFarm(input *dto.FarmRequestBody) (*models.Farm, error) {
+func (s *farmService) CreateFarm(input *dto.FarmRequestBody, userid int) (*models.Farm, error) {
 	farm := &models.Farm{}
 
 	myFarm, err := s.farmRepository.FindByName(input.Name)
@@ -64,7 +64,7 @@ func (s *farmService) CreateFarm(input *dto.FarmRequestBody) (*models.Farm, erro
 	farm.Name = input.Name
 	log.Println(farm)
 
-	farm, err = s.farmRepository.Save(farm)
+	farm, err = s.farmRepository.Save(farm, userid)
 	if err != nil {
 		return farm, err
 	}
@@ -72,7 +72,7 @@ func (s *farmService) CreateFarm(input *dto.FarmRequestBody) (*models.Farm, erro
 	return farm, nil
 }
 
-func (s *farmService) UpdateFarm(query *dto.FarmRequestBody, id int) (*models.Farm, error) {
+func (s *farmService) UpdateFarm(query *dto.FarmRequestBody, id, userid int) (*models.Farm, error) {
 	farm := &models.Farm{}
 
 	myFarm, err := s.farmRepository.FindById(id)
@@ -95,7 +95,7 @@ func (s *farmService) UpdateFarm(query *dto.FarmRequestBody, id int) (*models.Fa
 
 	farm.Name = query.Name
 	farm.FarmId = id
-	farm, err = s.farmRepository.Update(farm)
+	farm, err = s.farmRepository.Update(farm, userid)
 	if err != nil {
 		return farm, err
 	}
@@ -103,7 +103,7 @@ func (s *farmService) UpdateFarm(query *dto.FarmRequestBody, id int) (*models.Fa
 	return farm, nil
 }
 
-func (s *farmService) DeleteFarm(id int) (*models.Farm, error) {
+func (s *farmService) DeleteFarm(id, userid int) (*models.Farm, error) {
 	farm := &models.Farm{}
 
 	myFarm, err := s.farmRepository.FindById(id)
@@ -115,7 +115,7 @@ func (s *farmService) DeleteFarm(id int) (*models.Farm, error) {
 		return myFarm, &custom_error.FarmNotFoundError{}
 	}
 
-	farm, err = s.farmRepository.Delete(id)
+	farm, err = s.farmRepository.Delete(id, userid)
 	if err != nil {
 		return farm, err
 	}
