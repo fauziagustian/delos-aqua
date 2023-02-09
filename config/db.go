@@ -39,6 +39,7 @@ func ConnectDb() *gorm.DB {
 	log.Println("connected")
 	db.Logger = logger.Default.LogMode(logger.Info)
 
+	//comment this 2 line code if u done import db or succes running migration
 	log.Println("running migrations")
 	db.AutoMigrate(&models.User{}, &models.Farm{}, &models.Pond{}, &models.UserAgents{})
 

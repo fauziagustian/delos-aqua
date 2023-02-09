@@ -16,7 +16,7 @@ with docker i have succesfully running, if you have any error u can running in t
 - Import postman collection to ur postman apps
 
 This below for fail running on the top
-2. How To start run with go run main.go :
+2. How To start run with go run main.go:
 - Clone this apps
 - Create database postgres with name delos
 - go install
