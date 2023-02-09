@@ -65,10 +65,10 @@ func FormatFarm(farm *models.Farm) FarmResponse {
 	}
 }
 
-func FormatFarms(transactions []*models.Farm) []FarmResponse {
+func FormatFarms(farms []*models.Farm) []FarmResponse {
 	formattedFarm := []FarmResponse{}
-	for _, transaction := range transactions {
-		formattedBook := FormatFarm(transaction)
+	for _, farm := range farms {
+		formattedBook := FormatFarm(farm)
 		formattedFarm = append(formattedFarm, formattedBook)
 	}
 	return formattedFarm
